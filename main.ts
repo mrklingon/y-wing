@@ -33,6 +33,15 @@ function mkStars () {
         }
     }
 }
+input.onGesture(Gesture.Shake, function () {
+    music.play(music.tonePlayable(784, music.beat(BeatFraction.Eighth)), music.PlaybackMode.UntilDone)
+    music.play(music.tonePlayable(392, music.beat(BeatFraction.Eighth)), music.PlaybackMode.UntilDone)
+    if (droid) {
+        droid = false
+    } else {
+        droid = true
+    }
+})
 input.onGesture(Gesture.TiltRight, function () {
     ywing += 1
     ywing = (ywing + 5) % 5
@@ -51,6 +60,8 @@ function slideStars () {
     led.plot(0, ywing)
 }
 let ywing = 0
+let droid = false
+droid = false
 game.setLife(5)
 ywing = 2
 images.createBigImage(`
@@ -64,4 +75,11 @@ basic.forever(function () {
     mkStars()
     basic.pause(100)
     slideStars()
+})
+basic.forever(function () {
+    if (droid && !(game.isGameOver())) {
+        laser()
+        ywing = randint(0, 4)
+    }
+    basic.pause(100 * randint(0, 10))
 })
