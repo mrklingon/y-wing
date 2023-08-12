@@ -16,11 +16,21 @@ function laser () {
         led.plot(bolt, ywing)
         basic.pause(25)
     }
-    for (let bolt = 0; bolt <= 4; bolt++) {
-        led.unplot(bolt, ywing)
+    for (let bolt2 = 0; bolt2 <= 4; bolt2++) {
+        led.unplot(bolt2, ywing)
         basic.pause(25)
     }
 }
+input.onButtonPressed(Button.B, function () {
+    if (Sound) {
+        Sound = false
+        music.setVolume(0)
+    } else {
+        Sound = true
+        music.setVolume(138)
+        music.play(music.tonePlayable(988, music.beat(BeatFraction.Eighth)), music.PlaybackMode.UntilDone)
+    }
+})
 function mkStars () {
     for (let index = 0; index <= 4; index++) {
         if (randint(0, 10) > 7) {
@@ -47,9 +57,9 @@ input.onGesture(Gesture.TiltRight, function () {
     ywing = (ywing + 5) % 5
 })
 function slideStars () {
-    for (let index = 0; index <= 3; index++) {
+    for (let index2 = 0; index2 <= 3; index2++) {
         for (let y2 = 0; y2 <= 4; y2++) {
-            led.plotBrightness(index, y2, led.pointBrightness(index + 1, y2))
+            led.plotBrightness(index2, y2, led.pointBrightness(index2 + 1, y2))
         }
     }
     if (led.pointBrightness(0, ywing) == 200) {
@@ -59,6 +69,7 @@ function slideStars () {
     }
     led.plot(0, ywing)
 }
+let Sound = false
 let ywing = 0
 let droid = false
 droid = false
@@ -71,15 +82,16 @@ images.createBigImage(`
     . . # . . . . . . .
     . # # # # . . . . .
     `).scrollImage(1, 200)
-basic.forever(function () {
-    mkStars()
-    basic.pause(100)
-    slideStars()
-})
+Sound = true
 basic.forever(function () {
     if (droid && !(game.isGameOver())) {
         laser()
         ywing = randint(0, 4)
     }
     basic.pause(100 * randint(0, 10))
+})
+basic.forever(function () {
+    mkStars()
+    basic.pause(100)
+    slideStars()
 })
