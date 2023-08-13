@@ -7,9 +7,6 @@ function MkMts () {
     }
 }
 input.onButtonPressed(Button.A, function () {
-    laser()
-})
-input.onGesture(Gesture.TiltLeft, function () {
     ywing += -1
     ywing = (ywing + 5) % 5
     basic.pause(100)
@@ -31,15 +28,12 @@ function laser () {
         basic.pause(25)
     }
 }
+input.onButtonPressed(Button.AB, function () {
+    laser()
+})
 input.onButtonPressed(Button.B, function () {
-    if (Sound) {
-        Sound = false
-        music.setVolume(0)
-    } else {
-        Sound = true
-        music.setVolume(138)
-        music.play(music.tonePlayable(988, music.beat(BeatFraction.Eighth)), music.PlaybackMode.UntilDone)
-    }
+    ywing += 1
+    ywing = (ywing + 5) % 5
 })
 function mkStars () {
     for (let index = 0; index <= 4; index++) {
@@ -62,9 +56,15 @@ input.onGesture(Gesture.Shake, function () {
         droid = true
     }
 })
-input.onGesture(Gesture.TiltRight, function () {
-    ywing += 1
-    ywing = (ywing + 5) % 5
+input.onLogoEvent(TouchButtonEvent.Pressed, function () {
+    if (Sound) {
+        Sound = false
+        music.setVolume(0)
+    } else {
+        Sound = true
+        music.setVolume(138)
+        music.play(music.tonePlayable(988, music.beat(BeatFraction.Eighth)), music.PlaybackMode.UntilDone)
+    }
 })
 function slideStars () {
     for (let index2 = 0; index2 <= 3; index2++) {
@@ -103,14 +103,14 @@ basic.forever(function () {
 })
 basic.forever(function () {
     Tick += 1
-    if (Tick < 100) {
+    if (Tick < 50) {
         mkStars()
     }
     slideStars()
     basic.pause(100)
-    if (Tick > 100) {
+    if (Tick > 50) {
         MkMts()
-        if (Tick > 200) {
+        if (Tick > 100) {
             Tick = 0
         }
     }
