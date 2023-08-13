@@ -23,6 +23,19 @@ def laser():
     for bolt2 in range(5):
         led.unplot(bolt2, ywing)
         basic.pause(25)
+
+def on_button_pressed_b():
+    global Sound
+    if Sound:
+        Sound = False
+        music.set_volume(0)
+    else:
+        Sound = True
+        music.set_volume(138)
+        music.play(music.tone_playable(988, music.beat(BeatFraction.EIGHTH)),
+            music.PlaybackMode.UNTIL_DONE)
+input.on_button_pressed(Button.B, on_button_pressed_b)
+
 def mkStars():
     for index in range(5):
         if randint(0, 10) > 7:
@@ -61,6 +74,7 @@ def slideStars():
             music.PlaybackMode.UNTIL_DONE)
         game.remove_life(1)
     led.plot(0, ywing)
+Sound = False
 ywing = 0
 droid = False
 droid = False
@@ -73,17 +87,18 @@ images.create_big_image("""
     . . # . . . . . . .
     . # # # # . . . . .
     """).scroll_image(1, 200)
+Sound = True
 
 def on_forever():
-    mkStars()
-    basic.pause(100)
-    slideStars()
-basic.forever(on_forever)
-
-def on_forever2():
     global ywing
     if droid and not (game.is_game_over()):
         laser()
         ywing = randint(0, 4)
     basic.pause(100 * randint(0, 10))
+basic.forever(on_forever)
+
+def on_forever2():
+    mkStars()
+    basic.pause(100)
+    slideStars()
 basic.forever(on_forever2)

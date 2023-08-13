@@ -1,9 +1,19 @@
+function MkMts () {
+    for (let index = 0; index <= randint(1, 2); index++) {
+        led.plotBrightness(4, 4 - index, randint(20, 100))
+    }
+    if (randint(0, 10) > 7) {
+        led.plotBrightness(4, randint(0, 3), 200)
+    }
+}
 input.onButtonPressed(Button.A, function () {
     laser()
 })
 input.onGesture(Gesture.TiltLeft, function () {
     ywing += -1
     ywing = (ywing + 5) % 5
+    basic.pause(100)
+    slideStars()
 })
 function laser () {
     music.play(music.tonePlayable(523, music.beat(BeatFraction.Eighth)), music.PlaybackMode.UntilDone)
@@ -76,13 +86,14 @@ droid = false
 game.setLife(5)
 ywing = 2
 images.createBigImage(`
-    . # # # # . . . . .
+    . # # # # # . . . .
     . . # . . . . . . .
     # # # # . . . . . .
     . . # . . . . . . .
-    . # # # # . . . . .
+    . # # # # # . . . .
     `).scrollImage(1, 200)
 Sound = true
+let Tick = 0
 basic.forever(function () {
     if (droid && !(game.isGameOver())) {
         laser()
@@ -91,7 +102,17 @@ basic.forever(function () {
     basic.pause(100 * randint(0, 10))
 })
 basic.forever(function () {
-    mkStars()
-    basic.pause(100)
+    Tick += 1
+    if (Tick < 100) {
+        mkStars()
+    }
     slideStars()
+    basic.pause(100)
+    if (Tick > 100) {
+        MkMts()
+        if (Tick > 200) {
+            Tick = 0
+        }
+    }
+    basic.pause(100)
 })
